@@ -2,47 +2,112 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
-    [SerializeField] private Weapon weaponHolder;  // Referensi ke prefab Weapon yang akan diambil Player
-    private Weapon weapon;
+    [SerializeField] Weapon weaponHolder;
 
-    private void Awake()
+    Weapon weapon;
+
+    void Awake()
     {
-        // Tidak perlu menginisialisasi weapon langsung di sini karena kita akan menginstansiasinya nanti
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("Collision detected with: " + other.name); // Log untuk cek collision
-
-        // Periksa apakah objek yang bersentuhan adalah Player
-        if (other.CompareTag("Player"))
-        {
-            PickupWeapon(other.transform);
+        if (weaponHolder != null)
+            weapon = Instantiate(weaponHolder);
+        else{
+            Debug.Log("no weapon holder");
         }
     }
 
-    private void PickupWeapon(Transform playerTransform)
+    void Start()
     {
-        if (weaponHolder != null) // Pastikan weaponHolder sudah diassign di Inspector
+        if (weapon == null){
+            Debug.Log("weap Null");
+            return;
+        }
+            
+
+        TurnVisual(false);
+
+        weapon.enabled = false;
+        weapon.transform.SetParent(transform, false);
+        weapon.transform.localPosition = transform.position;
+
+        weapon.parentTransform = transform;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(weapon == null){
+            Debug.Log("no Weap");
+        }
+        else if(!other.gameObject.CompareTag("Player")){
+            Debug.Log("Not A player");
+        }
+        // Trigger itu bisa ke semua objek, jadi harus cari si Player
+        if (weapon != null && other.gameObject.CompareTag("Player"))
         {
-            // Instansiasi weapon dari prefab weaponHolder ke dalam scene
-            weapon = Instantiate(weaponHolder, playerTransform.position, Quaternion.identity);
+            Weapon playerWeapon = other.gameObject.GetComponentInChildren<Weapon>();
 
-            // Pindahkan weapon yang baru diinstansiasi ke Player dan atur sebagai child dari Player
-            weapon.transform.SetParent(playerTransform);
-            weapon.transform.localPosition = Vector3.zero;  // Atur posisi relatif weapon di Player
+            if (playerWeapon != null)
+            {
+                PickupHandler(true);
+                playerWeapon.transform.SetParent(playerWeapon.parentTransform);
+                playerWeapon.transform.localScale = new(1, 1);
+                playerWeapon.transform.localPosition = new(0, 0);
 
-            weapon.EnableWeapon(true);  // Aktifkan weapon di tangan Player
-            Debug.Log("Player picked up the weapon!");
+                TurnVisual(false, playerWeapon);
+            }
 
-            // Hancurkan atau nonaktifkan pickup setelah diambil
-            Destroy(gameObject);
+            weapon.enabled = true;
+            weapon.transform.SetParent(other.transform, false);
+
+            TurnVisual(true);
+            PickupHandler(false);
+
+            weapon.transform.localPosition = new(0.0f, 0.0f);
+            Player player = other.GetComponent<Player>();
+            if (player != null){
+                player.SwitchWeapon(weapon, this);  // Pass the new weapon and this WeaponPickup instance
+            }
+        }
+        else{
+            Debug.Log("no reference");
+        }
+    }
+
+    void TurnVisual(bool on)
+    {
+        if (on)
+        {
+            weapon.GetComponent<SpriteRenderer>().enabled = true;
+            weapon.GetComponent<Animator>().enabled = true;
+            weapon.GetComponent<Weapon>().enabled = true;
         }
         else
         {
-            Debug.LogWarning("WeaponHolder is not assigned in the Inspector!");
+            weapon.GetComponent<SpriteRenderer>().enabled = false;
+            weapon.GetComponent<Animator>().enabled = false;
+            weapon.GetComponent<Weapon>().enabled = false;
         }
+
     }
+
+    void TurnVisual(bool on, Weapon weapon)
+    {
+        if (on)
+        {
+            weapon.GetComponent<SpriteRenderer>().enabled = true;
+            weapon.GetComponent<Animator>().enabled = true;
+            weapon.GetComponent<Weapon>().enabled = true;
+        }
+        else
+        {
+            weapon.GetComponent<SpriteRenderer>().enabled = false;
+            weapon.GetComponent<Animator>().enabled = false;
+            weapon.GetComponent<Weapon>().enabled = false;
+        }
+
+    }
+
+    public void PickupHandler(bool state){
+        gameObject.SetActive(state);
+    }
+
 }
-
-

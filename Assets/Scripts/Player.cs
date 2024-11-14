@@ -2,49 +2,60 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // This for getting the instace of Player Singleton
     public static Player Instance { get; private set; }
-    public PlayerMovement playerMovement;
-    public Animator animator;
 
-    private void Awake()
+    // Getting the PlayerMovement methods
+    PlayerMovement playerMovement;
+    // Animator
+    Animator animator;
+
+
+    // Key for Singleton
+    void Awake()
     {
-        // Singleton pattern to ensure only one instance of Player exists
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Destroy(this);
+            return;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    // Getting Component
+    void Start()
     {
-        // Retrieve PlayerMovement and Animator components
+        // Get PlayerMovement components
         playerMovement = GetComponent<PlayerMovement>();
-        animator = GetComponentInChildren<Animator>();
+
+        // Get Animator components
+        animator = GameObject.Find("EngineEffects").GetComponent<Animator>();
     }
 
-    private void FixedUpdate()
+    // Using FixedUpdate to Move because of physics
+    void FixedUpdate()
     {
-        // Call Move method from PlayerMovement
         playerMovement.Move();
     }
 
-    private void LateUpdate()
+    // LateUpdate for animation related
+    void LateUpdate()
     {
-        // Set animator's IsMoving parameter based on movement state
+        playerMovement.MoveBound();
         animator.SetBool("IsMoving", playerMovement.IsMoving());
     }
 
-    public void EquipWeapon(Weapon weapon)
-{
-    // Misalnya, tambahkan weapon di depan player
-    weapon.transform.SetParent(this.transform);
-    weapon.transform.localPosition = new Vector3(0, 1, 0); // Adjust posisi sesuai keinginan
-    weapon.gameObject.SetActive(true); // Tampilkan senjata
-}
+    private WeaponPickup currentWeaponPickup;
 
+    public void SwitchWeapon(Weapon newWeapon, WeaponPickup newWeaponPickup)
+    {
+        if (currentWeaponPickup != null)
+        {
+            currentWeaponPickup.PickupHandler(true);  // Make the previous weapon pickup visible again
+        }
+        currentWeaponPickup = newWeaponPickup;
+    }
 }
