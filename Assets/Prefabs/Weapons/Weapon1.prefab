@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &297560659821405003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247832510707777223}
+  m_Layer: 0
+  m_Name: BulletSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &247832510707777223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297560659821405003}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.87, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8140461567088045634}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1549454712036786992
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +64,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5744550196157384307}
+  - {fileID: 247832510707777223}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4923991894177566407
@@ -76,7 +108,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3571135687068329505, guid: 7dcbaddb41aacb94b9477289851a0322, type: 3}
+  m_Sprite: {fileID: -5764070725760886986, guid: c721cffbba1d7d544a0b093d04989007, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f76d88e36d8280499799d14e2b95df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootIntervalInSeconds: 0.1
+  bullet: {fileID: 66992438552933134}
+  bulletSpawnPoint: {fileID: 247832510707777223}
   parentTransform: {fileID: 0}
 --- !u!1001 &837244004970351705
 PrefabInstance:
@@ -133,13 +168,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet
       objectReference: {fileID: 0}
+    - target: {fileID: 571314857632232805, guid: 20720010647ac25488ce1a1356221c71, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4910824697736317482, guid: 20720010647ac25488ce1a1356221c71, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4910824697736317482, guid: 20720010647ac25488ce1a1356221c71, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4910824697736317482, guid: 20720010647ac25488ce1a1356221c71, type: 3}
       propertyPath: m_LocalPosition.z
@@ -176,8 +215,47 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 571314857632232805, guid: 20720010647ac25488ce1a1356221c71, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2869637985638670614}
+    - targetCorrespondingSourceObject: {fileID: 571314857632232805, guid: 20720010647ac25488ce1a1356221c71, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 66992438552933134}
   m_SourcePrefab: {fileID: 100100000, guid: 20720010647ac25488ce1a1356221c71, type: 3}
+--- !u!1 &897284134618478908 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 571314857632232805, guid: 20720010647ac25488ce1a1356221c71, type: 3}
+  m_PrefabInstance: {fileID: 837244004970351705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2869637985638670614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897284134618478908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 903ddd4ef30fa224fb4114411302e524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 66992438552933134}
+  damage: 10
+--- !u!114 &66992438552933134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897284134618478908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e087478822e1dd04dbac2799fc121cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpeed: 100
+  damage: 10
 --- !u!4 &5744550196157384307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4910824697736317482, guid: 20720010647ac25488ce1a1356221c71, type: 3}

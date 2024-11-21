@@ -15,8 +15,9 @@ public class Portal : MonoBehaviour
     void Update()
     {
         if (Vector2.Distance(transform.position, newPosition) < 0.5f)
+        {
             ChangePosition();
-
+        }
 
         if (GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Weapon>() != null)
         {

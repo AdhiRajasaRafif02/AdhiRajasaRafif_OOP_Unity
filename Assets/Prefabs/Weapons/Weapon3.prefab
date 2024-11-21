@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6818815265100862066, guid: c194c3eddbb0340468e6d22c20442b8b, type: 3}
+  m_Sprite: {fileID: -6937740676702733114, guid: d319f5e543d8b0149b08b8f8cc5da20b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,6 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f76d88e36d8280499799d14e2b95df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootIntervalInSeconds: 3
+  bullet: {fileID: 0}
+  bulletSpawnPoint: {fileID: 0}
   parentTransform: {fileID: 0}
 --- !u!1001 &1397321667221076246
 PrefabInstance:
