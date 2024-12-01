@@ -1,31 +1,50 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class UIManager : MonoBehaviour
+public class UI : MonoBehaviour
 {
-    public Text healthText;    // Referensi ke teks Health
-    public Text pointsText;    // Referensi ke teks Points
-    public Text waveText;      // Referensi ke teks Wave
-    public Text enemiesText;   // Referensi ke teks Enemies
+    private Label pointsLabel;
+    private Label healthLabel;
+    private Label waveLabel;
+    private Label enemiesLabel;
 
-    public void UpdateHealth(int health)
+    private Player player;
+    private CombatManager combatManager;
+
+    void Start()
     {
-        healthText.text = "Health: " + health.ToString();
+        var root = GetComponent<UIDocument>().rootVisualElement;
+        pointsLabel = root.Q<Label>("Point");
+        healthLabel = root.Q<Label>("Health");
+        waveLabel = root.Q<Label>("Wave");
+        enemiesLabel = root.Q<Label>("EnemiesLeft");
+
+        player = Player.Instance;
+        combatManager = FindObjectOfType<CombatManager>();
     }
 
-    public void UpdatePoints(int points)
+    void Update()
     {
-        pointsText.text = "Points: " + points.ToString();
-    }
+        if (player != null && healthLabel != null)
+        {
+            healthLabel.text = "Health: " + player.GetComponent<HealthComponent>().Health;
+        }
 
-    public void UpdateWave(int wave)
-    {
-        waveText.text = "Wave: " + wave.ToString();
-    }
-
-    public void UpdateEnemies(int enemies)
-    {
-        enemiesText.text = "Enemies: " + enemies.ToString();
+        if (combatManager != null)
+        {
+            if (pointsLabel != null)
+            {
+                pointsLabel.text = "Points: " + combatManager.points;
+            }
+            if (waveLabel != null)
+            {
+                waveLabel.text = "Waves: " + combatManager.waveNumber;
+            }
+            if (enemiesLabel != null)
+            {
+                enemiesLabel.text = "Enemies Left: " + combatManager.totalEnemies;
+            }
+        }
     }
 }
 
